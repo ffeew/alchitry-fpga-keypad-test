@@ -17,14 +17,14 @@ pin usb_rx USB_TX;
 pin usb_tx USB_RX;
 
 pin outled C49;
-pin keypad[0] A2;
-pin keypad[1] A5;
-pin keypad[2] A8;
-pin keypad[3] A11;
-pin keypad[4] A3;
-pin keypad[5] A6;
-pin keypad[6] A9;
-pin keypad[7] A12;
+pin keypadrow[0] B33;
+pin keypadrow[1] B36;
+pin keypadrow[2] B39;
+pin keypadrow[3] B42;
+pin keypadcol[0] B34;
+pin keypadcol[1] B37;
+pin keypadcol[2] B40;
+pin keypadcol[3] B43;
 
 
 pin io_led[0][0] B21;
