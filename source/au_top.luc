@@ -1,0 +1,100 @@
+module au_top (
+    input clk,              // 100MHz clock
+    input rst_n,            // reset button (active low)
+    output led [8],         // 8 user controllable LEDs
+    input usb_rx,           // USB->Serial input
+    output usb_tx,          // USB->Serial output
+    output io_led [3][8],   // LEDs on IO Shield
+    output io_seg [8],      // 7-segment LEDs on IO Shield
+    output io_sel [4],      // Digit select on IO Shield
+    input io_button [5],    // 5 buttons on IO Shield
+    input io_dip [3][8],     // DIP switches on IO Shield
+    input keypad[8],
+    output outled
+  ) {
+  
+  sig rst;                  // reset signal
+  
+  .clk(clk) {
+    // The reset conditioner is used to synchronize the reset signal to the FPGA
+    // clock. This ensures the entire FPGA comes out of reset at the same time.
+    reset_conditioner reset_cond;
+    keypadDriver keypadInstance(.rst(rst));
+    .rst(rst){
+        dff keypadVal[16] (#INIT(32d15));
+        ws2812b_writer led_strip(#PIXEL_COUNT(256)); //set for 3 pixels
+    }
+  }
+  const LEDCOLOR = {hFF0000, h00FF00, h0000FF};
+  
+  always {
+    reset_cond.in = ~rst_n; // input raw inverted reset signal
+    rst = reset_cond.out;   // conditioned reset
+    keypadInstance.in_row = keypad[3:0];
+    keypadInstance.in_col = keypad[7:4];
+    outled = 0;
+    io_led = 3x{{8h00}};
+    io_seg = 8hff;          // turn segments off
+    io_sel = 4hf;           // select no digits
+    reset_cond.in = ~rst_n; // input raw inverted reset signal
+    rst = reset_cond.out;   // conditioned reset
+    led = 8h00;             // turn LEDs off
+    usb_tx = usb_rx;        // echo the serial data
+    
+    keypadVal.d[0] = keypadInstance.button_1;
+    keypadVal.d[1] = keypadInstance.button_2;
+    keypadVal.d[2] = keypadInstance.button_3;
+    keypadVal.d[3] = keypadInstance.button_a;
+    keypadVal.d[4] = keypadInstance.button_4;
+    keypadVal.d[5] = keypadInstance.button_5;
+    keypadVal.d[6] = keypadInstance.button_6;
+    keypadVal.d[7] = keypadInstance.button_b;
+    keypadVal.d[8] = keypadInstance.button_7;
+    keypadVal.d[9] = keypadInstance.button_8;
+    keypadVal.d[10] = keypadInstance.button_9;
+    keypadVal.d[11] = keypadInstance.button_c;
+    keypadVal.d[12] = keypadInstance.button_asterisk;
+    keypadVal.d[13] = keypadInstance.button_0;
+    keypadVal.d[14] = keypadInstance.button_hash;
+    keypadVal.d[15] = keypadInstance.button_d;
+    
+    led_strip.update=1; //sample write 
+    led_strip.color=LEDCOLOR[led_strip.pixel]; 
+    outled=led_strip.led;
+    
+    //keypad tester
+    case(keypadVal.q){
+      16h0001://button 1
+        io_led[0][0] = 1;
+      16h0002://button 2
+        io_led[0][1] = 1;
+      16h0004://button 3
+        io_led[0][2] = 1;
+      16h0008://button a
+        io_led[0][3] = 1;
+      16h0010://button 4
+        io_led[0][4] = 1;
+      16h0020://button 5
+        io_led[0][5] = 1;
+      16h0040://button 6
+        io_led[0][6] = 1;
+      16h0080://button b
+        io_led[0][7] = 1;        
+      16h0100://button 7
+        io_led[1][0] = 1;   
+      16h0200://button 8
+        io_led[1][1] = 1;  
+      16h0400://button 9
+        io_led[1][2] = 1;   
+      16h0800://button c
+        io_led[1][3] = 1;       
+      16h1000://button *
+        io_led[1][4] = 1;  
+      16h2000://button 0
+        io_led[1][5] = 1;  
+      16h4000://button #
+        io_led[1][6] = 1;  
+      16h8000://button d
+        io_led[1][7] = 1;     
+  }
+}
