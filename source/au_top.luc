@@ -25,7 +25,7 @@ module au_top (
         ws2812b_writer led_strip(#PIXEL_COUNT(256)); //set for 3 pixels
     }
   }
-  const LEDCOLOR = {hFF0000, h00FF00, h0000FF};
+  const LEDCOLOR = {24hFF0000, 24h00FF00, 24h0000FF, 24h0FF000, 24h000FF0, 24hF0000F};
   
   always {
     reset_cond.in = ~rst_n; // input raw inverted reset signal
