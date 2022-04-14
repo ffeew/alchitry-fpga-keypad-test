@@ -81,7 +81,7 @@ module au_top (
     outled=led_strip.led;
     
     //keypad tester
-    if(keypadInstance.button_0) {
+if(keypadInstance.button_0) {
   io_led[0][7:4] = 4b0000;
 }
 if(keypadInstance.button_1) {

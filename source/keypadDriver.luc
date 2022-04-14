@@ -60,6 +60,8 @@ module keypadDriver (
       state.INPUT:
         //row.d = row.q;
         out_row[3:0] = 4b1111;
+        row.d = 4b0000;
+        col.d = 4b0000;
         if (|in_col[3:0]){
           if(in_col[0]==1){
             col.d = 4b0001;

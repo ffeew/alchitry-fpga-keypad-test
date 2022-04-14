@@ -65,7 +65,9 @@ module keypadDriver_2 (
     case (M_state_q)
       INPUT_state: begin
         out_row = 4'hf;
-        if ((|in_col[1+2-:3])) begin
+        M_row_d = 4'h0;
+        M_col_d = 4'h0;
+        if ((|in_col)) begin
           if (in_col[0+0-:1] == 1'h1) begin
             M_col_d = 4'h1;
           end else begin
@@ -91,7 +93,7 @@ module keypadDriver_2 (
       end
       SCAN_ROW1_state: begin
         out_row = 4'h1;
-        if ((|in_col[1+2-:3])) begin
+        if ((|in_col)) begin
           M_row_d = 4'h1;
           M_state_d = INPUT_state;
         end else begin
@@ -100,7 +102,7 @@ module keypadDriver_2 (
       end
       SCAN_ROW2_state: begin
         out_row = 4'h2;
-        if ((|in_col[1+2-:3])) begin
+        if ((|in_col)) begin
           M_row_d = 4'h2;
           M_state_d = INPUT_state;
         end else begin
@@ -109,7 +111,7 @@ module keypadDriver_2 (
       end
       SCAN_ROW3_state: begin
         out_row = 4'h4;
-        if ((|in_col[1+2-:3])) begin
+        if ((|in_col)) begin
           M_row_d = 4'h4;
           M_state_d = INPUT_state;
         end else begin
@@ -118,7 +120,7 @@ module keypadDriver_2 (
       end
       SCAN_ROW4_state: begin
         out_row = 4'h8;
-        if ((|in_col[1+2-:3])) begin
+        if ((|in_col)) begin
           M_row_d = 4'h8;
           M_state_d = INPUT_state;
         end else begin
