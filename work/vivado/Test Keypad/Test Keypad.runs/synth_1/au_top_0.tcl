@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "E:/Documents/Alchitry/Test Keypad/work/vivado/Test Keypad/Test Keypad.runs/synth_1/au_top_0.tcl"
+  variable script "C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.runs/synth_1/au_top_0.tcl"
   variable category "vivado_synth"
 }
 
@@ -76,18 +76,18 @@ create_project -in_memory -part xc7a35tftg256-1
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
-set_property webtalk.parent_dir {E:/Documents/Alchitry/Test Keypad/work/vivado/Test Keypad/Test Keypad.cache/wt} [current_project]
-set_property parent.project_path {E:/Documents/Alchitry/Test Keypad/work/vivado/Test Keypad/Test Keypad.xpr} [current_project]
+set_property webtalk.parent_dir {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.cache/wt} [current_project]
+set_property parent.project_path {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.xpr} [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_verilog -library xil_defaultlib {
-  {E:/Documents/Alchitry/Test Keypad/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/keypadDriver_2.v}
-  {E:/Documents/Alchitry/Test Keypad/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/reset_conditioner_1.v}
-  {E:/Documents/Alchitry/Test Keypad/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/ws2812b_writer_3.v}
-  {E:/Documents/Alchitry/Test Keypad/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/au_top_0.v}
+  {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/keypadDriver_2.v}
+  {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/reset_conditioner_1.v}
+  {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/ws2812b_writer_3.v}
+  {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/au_top_0.v}
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -98,11 +98,11 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc {{E:/Documents/Alchitry/Test Keypad/work/constraint/custom.xdc}}
-set_property used_in_implementation false [get_files {{E:/Documents/Alchitry/Test Keypad/work/constraint/custom.xdc}}]
+read_xdc C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/constraint/custom.xdc
+set_property used_in_implementation false [get_files C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/constraint/custom.xdc]
 
-read_xdc {{E:/Documents/Alchitry/Test Keypad/constraint/newConstraints.xdc}}
-set_property used_in_implementation false [get_files {{E:/Documents/Alchitry/Test Keypad/constraint/newConstraints.xdc}}]
+read_xdc C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/constraint/newConstraints.xdc
+set_property used_in_implementation false [get_files C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/constraint/newConstraints.xdc]
 
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]

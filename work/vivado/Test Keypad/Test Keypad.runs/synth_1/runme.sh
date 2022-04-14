@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='E:/Documents/Alchitry/Test Keypad/work/vivado/Test Keypad/Test Keypad.runs/synth_1'
+HD_PWD='C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.runs/synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

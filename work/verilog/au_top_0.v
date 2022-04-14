@@ -120,60 +120,58 @@ module au_top_0 (
     M_keypadVal_d[13+0-:1] = M_keypadInstance_button_0;
     M_keypadVal_d[14+0-:1] = M_keypadInstance_button_hash;
     M_keypadVal_d[15+0-:1] = M_keypadInstance_button_d;
+    io_led[8+4+3-:4] = keypadcol;
     M_led_strip_update = 1'h1;
     M_led_strip_color = LEDCOLOR[(M_led_strip_pixel)*24+23-:24];
     outled = M_led_strip_led;
-    
-    case (M_keypadVal_q)
-      16'h0001: begin
-        io_led[0+0+0-:1] = 1'h1;
-      end
-      16'h0002: begin
-        io_led[0+1+0-:1] = 1'h1;
-      end
-      16'h0004: begin
-        io_led[0+2+0-:1] = 1'h1;
-      end
-      16'h0008: begin
-        io_led[0+3+0-:1] = 1'h1;
-      end
-      16'h0010: begin
-        io_led[0+4+0-:1] = 1'h1;
-      end
-      16'h0020: begin
-        io_led[0+5+0-:1] = 1'h1;
-      end
-      16'h0040: begin
-        io_led[0+6+0-:1] = 1'h1;
-      end
-      16'h0080: begin
-        io_led[0+7+0-:1] = 1'h1;
-      end
-      16'h0100: begin
-        io_led[8+0+0-:1] = 1'h1;
-      end
-      16'h0200: begin
-        io_led[8+1+0-:1] = 1'h1;
-      end
-      16'h0400: begin
-        io_led[8+2+0-:1] = 1'h1;
-      end
-      16'h0800: begin
-        io_led[8+3+0-:1] = 1'h1;
-      end
-      16'h1000: begin
-        io_led[8+4+0-:1] = 1'h1;
-      end
-      16'h2000: begin
-        io_led[8+5+0-:1] = 1'h1;
-      end
-      16'h4000: begin
-        io_led[8+6+0-:1] = 1'h1;
-      end
-      16'h8000: begin
-        io_led[8+7+0-:1] = 1'h1;
-      end
-    endcase
+    if (M_keypadInstance_button_0) begin
+      io_led[0+4+3-:4] = 4'h0;
+    end
+    if (M_keypadInstance_button_1) begin
+      io_led[0+4+3-:4] = 4'h1;
+    end
+    if (M_keypadInstance_button_2) begin
+      io_led[0+4+3-:4] = 4'h2;
+    end
+    if (M_keypadInstance_button_3) begin
+      io_led[0+4+3-:4] = 4'h3;
+    end
+    if (M_keypadInstance_button_4) begin
+      io_led[0+4+3-:4] = 4'h4;
+    end
+    if (M_keypadInstance_button_5) begin
+      io_led[0+4+3-:4] = 4'h5;
+    end
+    if (M_keypadInstance_button_6) begin
+      io_led[0+4+3-:4] = 4'h6;
+    end
+    if (M_keypadInstance_button_7) begin
+      io_led[0+4+3-:4] = 4'h7;
+    end
+    if (M_keypadInstance_button_8) begin
+      io_led[0+4+3-:4] = 4'h8;
+    end
+    if (M_keypadInstance_button_9) begin
+      io_led[0+4+3-:4] = 4'h9;
+    end
+    if (M_keypadInstance_button_a) begin
+      io_led[0+4+3-:4] = 4'ha;
+    end
+    if (M_keypadInstance_button_b) begin
+      io_led[0+4+3-:4] = 4'hb;
+    end
+    if (M_keypadInstance_button_c) begin
+      io_led[0+4+3-:4] = 4'hc;
+    end
+    if (M_keypadInstance_button_d) begin
+      io_led[0+4+3-:4] = 4'hd;
+    end
+    if (M_keypadInstance_button_asterisk) begin
+      io_led[0+4+3-:4] = 4'he;
+    end
+    if (M_keypadInstance_button_hash) begin
+      io_led[0+4+3-:4] = 4'hf;
+    end
   end
   
   always @(posedge clk) begin

@@ -1,8 +1,8 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date         : Thu Apr 14 12:06:50 2022
-| Host         : DKAH running 64-bit major release  (build 9200)
+| Date         : Thu Apr 14 14:03:51 2022
+| Host         : DKAH-L running 64-bit major release  (build 9200)
 | Command      : report_drc -file au_top_0_drc_opted.rpt -pb au_top_0_drc_opted.pb -rpx au_top_0_drc_opted.rpx
 | Design       : au_top_0
 | Device       : xc7a35tftg256-1
@@ -24,11 +24,11 @@ Table of Contents
       Design limits: <entire design considered>
            Ruledeck: default
              Max violations: <unlimited>
-             Violations found: 1
+             Violations found: 2
 +--------+----------+------------------------------------------------+------------+
 | Rule   | Severity | Description                                    | Violations |
 +--------+----------+------------------------------------------------+------------+
-| PLIO-3 | Warning  | Placement Constraints Check for IO constraints | 1          |
+| PLIO-3 | Warning  | Placement Constraints Check for IO constraints | 2          |
 +--------+----------+------------------------------------------------+------------+
 
 2. REPORT DETAILS
@@ -36,6 +36,11 @@ Table of Contents
 PLIO-3#1 Warning
 Placement Constraints Check for IO constraints  
 Partially locked IO Bus is found. Following components of the IO Bus io_button[4:0] are not locked:  io_button[4]
+Related violations: <none>
+
+PLIO-3#2 Warning
+Placement Constraints Check for IO constraints  
+Partially locked IO Bus is found. Following components of the IO Bus io_dip[23:0] are not locked:  io_dip[9] io_dip[8] io_dip[7] io_dip[6] io_dip[5] io_dip[4] io_dip[3] io_dip[2]
 Related violations: <none>
 
 

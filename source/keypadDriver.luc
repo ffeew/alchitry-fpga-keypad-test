@@ -60,7 +60,7 @@ module keypadDriver (
       state.INPUT:
         //row.d = row.q;
         out_row[3:0] = 4b1111;
-        if (|in_col[3:1]){
+        if (|in_col[3:0]){
           if(in_col[0]==1){
             col.d = 4b0001;
             }
@@ -85,7 +85,7 @@ module keypadDriver (
       state.SCAN_ROW1:
         //col.d = col.q;
         out_row[3:0] = 4b0001;
-        if (|in_col[3:1]){
+        if (|in_col[3:0]){
           row.d = 4b0001;
           state.d = state.INPUT;
         }
@@ -96,7 +96,7 @@ module keypadDriver (
       state.SCAN_ROW2:
         //col.d = col.q;
         out_row[3:0] = 4b0010;
-        if (|in_col[3:1]){
+        if (|in_col[3:0]){
           row.d = 4b0010;
           state.d = state.INPUT;
         }
@@ -107,7 +107,7 @@ module keypadDriver (
       state.SCAN_ROW3:
         //col.d = col.q;
         out_row[3:0] = 4b0100;
-        if (|in_col[3:1]){
+        if (|in_col[3:0]){
           row.d = 4b0100;
           state.d = state.INPUT;
         }
@@ -118,7 +118,7 @@ module keypadDriver (
       state.SCAN_ROW4:
         //col.d = col.q;
         out_row[3:0] = 4b1000;
-        if (|in_col[3:1]){
+        if (|in_col[3:0]){
           row.d = 4b1000;
           state.d = state.INPUT;
         }

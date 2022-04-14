@@ -74,43 +74,59 @@ module au_top (
     
     
     
+    io_led[1][7:4] = keypadcol[3:0];
+    
     led_strip.update=1; //sample write 
     led_strip.color=LEDCOLOR[led_strip.pixel]; 
     outled=led_strip.led;
     
     //keypad tester
-    case(keypadVal.q){
-      16h0001://button 1
-        io_led[0][0] = 1;
-      16h0002://button 2
-        io_led[0][1] = 1;
-      16h0004://button 3
-        io_led[0][2] = 1;
-      16h0008://button a
-        io_led[0][3] = 1;
-      16h0010://button 4
-        io_led[0][4] = 1;
-      16h0020://button 5
-        io_led[0][5] = 1;
-      16h0040://button 6
-        io_led[0][6] = 1;
-      16h0080://button b
-        io_led[0][7] = 1;        
-      16h0100://button 7
-        io_led[1][0] = 1;   
-      16h0200://button 8
-        io_led[1][1] = 1;  
-      16h0400://button 9
-        io_led[1][2] = 1;   
-      16h0800://button c
-        io_led[1][3] = 1;       
-      16h1000://button *
-        io_led[1][4] = 1;  
-      16h2000://button 0
-        io_led[1][5] = 1;  
-      16h4000://button #
-        io_led[1][6] = 1;  
-      16h8000://button d
-        io_led[1][7] = 1;     
-  }
+    if(keypadInstance.button_0) {
+  io_led[0][7:4] = 4b0000;
+}
+if(keypadInstance.button_1) {
+  io_led[0][7:4] = 4b0001;
+}
+if(keypadInstance.button_2) {
+  io_led[0][7:4] = 4b0010;
+}
+if(keypadInstance.button_3) {
+  io_led[0][7:4] = 4b0011;
+}
+if(keypadInstance.button_4) {
+  io_led[0][7:4] = 4b0100;
+}
+if(keypadInstance.button_5) {
+  io_led[0][7:4] = 4b0101;
+}
+if(keypadInstance.button_6) {
+  io_led[0][7:4] = 4b0110;
+}
+if(keypadInstance.button_7) {
+  io_led[0][7:4] = 4b0111;
+}
+if(keypadInstance.button_8) {
+  io_led[0][7:4] = 4b1000;
+}
+if(keypadInstance.button_9) {
+  io_led[0][7:4] = 4b1001;
+}
+if(keypadInstance.button_a) {
+  io_led[0][7:4] = 4b1010;
+}
+if(keypadInstance.button_b) {
+  io_led[0][7:4] = 4b1011;
+}
+if(keypadInstance.button_c) {
+  io_led[0][7:4] = 4b1100;
+}
+if(keypadInstance.button_d) {
+  io_led[0][7:4] = 4b1101;
+}
+if(keypadInstance.button_asterisk) {
+  io_led[0][7:4] = 4b1110;
+}
+if(keypadInstance.button_hash) {
+  io_led[0][7:4] = 4b1111;
+}
 }
