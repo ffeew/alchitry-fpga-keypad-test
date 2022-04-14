@@ -24,13 +24,13 @@ module au_top (
     .rst(rst){
         dff keypadVal[16] (#INIT(32d15));
         ws2812b_writer led_strip(#PIXEL_COUNT(256)); //set for 3 pixels
-        multi_seven_seg seven_seg_display;
+        //multi_seven_seg seven_seg_display;
     }
   }
   const LEDCOLOR = {24hFF0000, 24h00FF00, 24h0000FF, 24h0FF000, 24h000FF0, 24hF0000F};
   
   always {
-    seven_seg_display.values = 4x{{5b0}};
+    //seven_seg_display.values = 4x{{5b0}};
     
     
     
@@ -51,9 +51,9 @@ module au_top (
     usb_tx = usb_rx;        // echo the serial data
     
    
-    seven_seg_display.values[0] = keypadInstance.o;
-    io_seg = seven_seg_display.seg;
-    io_sel = seven_seg_display.sel;
+//    seven_seg_display.values[0] = keypadInstance.o;
+//    io_seg = seven_seg_display.seg;
+//    io_sel = seven_seg_display.sel;
     
     keypadVal.d[0] = keypadInstance.button_1;
     keypadVal.d[1] = keypadInstance.button_2;

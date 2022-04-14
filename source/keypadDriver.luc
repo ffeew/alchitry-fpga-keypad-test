@@ -23,101 +23,108 @@ module keypadDriver (
     output button_d,
 
     output button_asterisk,
-    output button_hash,
-    output o[3]
+    output button_hash
   ) {
     
-  dff col[3](.clk(clk), .rst(rst), #INIT(0));
-  dff out_row_d[4](.clk(clk), .rst(rst), #INIT(4hF));
+  .clk(clk){
+    .rst(rst){
+      fsm state = {INPUT, SCAN_ROW1, SCAN_ROW2, SCAN_ROW3, SCAN_ROW4};
+      dff col[4];
+      dff row[4];
+    }
+    
+
+  }
 
   always {
-    button_0 = 0;
-    button_1 = 0;
-    button_2 = 0;
-    button_3 = 0;
-    button_4 = 0;
-    button_5 = 0;
-    button_6 = 0;
-    button_7 = 0;
-    button_8 = 0;
-    button_9 = 0;
-
-    button_a = 0;
-    button_b = 0;
-    button_c = 0;
-    button_d = 0;
-
-    button_asterisk = 0;
-    button_hash = 0;
-
-    out_row = out_row_d.q;
-
-    col.d = col.q;
-    o = col.q;
     
-    if(col.q == 0) {
-      case(in_col) {
-        4b1000:
-          col.d = 1;
-          out_row_d.d = 4b1000;
-        4b0100:
-          col.d = 2;
-          out_row_d.d = 4b1000;
-        4b0010:
-          col.d = 3;
-          out_row_d.d = 4b1000;
-        4b0001:
-          col.d = 4;
-          out_row_d.d = 4b1000;
-      }
-    }
-    else {
-      if(out_row_d.q == 4b1000) {
-        if(in_col != 0) {
-          button_1 = col.q == 1;
-          button_2 = col.q == 2;
-          button_3 = col.q == 3;
-          button_a = col.q == 4;
-          out_row_d.d = 4hF;
-          col.d = 0;
-        } else {
-          out_row_d.d = 4b0100;
+    button_1 = col.q[0] & row.q[0];
+    button_2 = col.q[1] & row.q[0];
+    button_3 = col.q[2] & row.q[0];
+    button_a = col.q[3] & row.q[0];
+    button_4 = col.q[0] & row.q[1];
+    button_5 = col.q[1] & row.q[1];
+    button_6 = col.q[2] & row.q[1];
+    button_b = col.q[3] & row.q[1];
+    button_7 = col.q[0] & row.q[2];
+    button_8 = col.q[1] & row.q[2];
+    button_9 = col.q[2] & row.q[2];
+    button_c = col.q[3] & row.q[2];
+    button_asterisk = col.q[0] & row.q[3];
+    button_0 = col.q[1] & row.q[3];
+    button_hash = col.q[2] & row.q[3];
+    button_d = col.q[3] & row.q[3];
+    out_row[3:0] = 4b0000;
+    
+    case (state.q) {
+      state.INPUT:
+        //row.d = row.q;
+        out_row[3:0] = 4b1111;
+        if (|in_col[3:1]){
+          if(in_col[0]==1){
+            col.d = 4b0001;
+            }
+          else if(in_col[1]==1){
+            col.d = 4b0010;
+            }
+          else if(in_col[2]==1){
+            col.d = 4b0100;
+            }
+          else if(in_col[3]==1){
+            col.d = 4b1000;
+            }
+          else{
+            button_1 = 1;
+            button_2 = 1;
+            button_3 = 1;
+            button_4 = 1;
+          }
+          state.d = state.SCAN_ROW1;
         }
-      }
-      else if(out_row_d.q == 4b0100) {
-        if(in_col != 0) {
-          button_4 = col.q == 1;
-          button_5 = col.q == 2;
-          button_6 = col.q == 3;
-          button_b = col.q == 4;
-          out_row_d.d = 4hF;
-          col.d = 0;
-        } else {
-          out_row_d.d = 4b0010;
+        
+      state.SCAN_ROW1:
+        //col.d = col.q;
+        out_row[3:0] = 4b0001;
+        if (|in_col[3:1]){
+          row.d = 4b0001;
+          state.d = state.INPUT;
         }
-      }
-      else if(out_row_d.q == 4b0010) {
-        if(in_col != 0) {
-          button_7 = col.q == 1;
-          button_8 = col.q == 2;
-          button_9 = col.q == 3;
-          button_c = col.q == 4;
-          out_row_d.d = 4hF;
-          col.d = 0;
-        } else {
-          out_row_d.d = 4b0001;
+        else{
+          state.d = state.SCAN_ROW2;
         }
-      }
-      else if(out_row_d.q == 4b0001) {
-        if(in_col != 0) {
-          button_asterisk = col.q == 4;
-          button_0 = col.q == 4;
-          button_hash = col.q == 4;
-          button_d = col.q == 4;
-          out_row_d.d = 4hF;
-          col.d = 0;
+          
+      state.SCAN_ROW2:
+        //col.d = col.q;
+        out_row[3:0] = 4b0010;
+        if (|in_col[3:1]){
+          row.d = 4b0010;
+          state.d = state.INPUT;
         }
-      }
+        else{
+          state.d = state.SCAN_ROW3;
+        }
+      
+      state.SCAN_ROW3:
+        //col.d = col.q;
+        out_row[3:0] = 4b0100;
+        if (|in_col[3:1]){
+          row.d = 4b0100;
+          state.d = state.INPUT;
+        }
+        else{
+          state.d = state.SCAN_ROW4;
+        }        
+       
+      state.SCAN_ROW4:
+        //col.d = col.q;
+        out_row[3:0] = 4b1000;
+        if (|in_col[3:1]){
+          row.d = 4b1000;
+          state.d = state.INPUT;
+        }
+        else{
+          state.d = state.SCAN_ROW1;
+        }          
     }
   }
 }

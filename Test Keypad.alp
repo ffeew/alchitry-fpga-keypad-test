@@ -3,11 +3,11 @@
   <files>
     <src>multi_seven_seg.luc</src>
     <component>counter.luc</component>
-    <src>ws2812b_writer.luc</src>
     <src>seven_seg.luc</src>
     <src top="true">au_top.luc</src>
     <component>reset_conditioner.luc</component>
     <component>decoder.luc</component>
+    <src>ws2812b_writer.luc</src>
     <src>keypadDriver.luc</src>
     <constraint>custom.acf</constraint>
     <constraint>newConstraints.xdc</constraint>
