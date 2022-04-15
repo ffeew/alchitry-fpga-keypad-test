@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date         : Thu Apr 14 14:23:19 2022
+| Date         : Fri Apr 15 19:43:33 2022
 | Host         : DKAH-L running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file au_top_0_control_sets_placed.rpt
 | Design       : au_top_0
@@ -23,11 +23,11 @@ Table of Contents
 +----------------------------------------------------------+-------+
 |                          Status                          | Count |
 +----------------------------------------------------------+-------+
-| Total control sets                                       |     9 |
-|    Minimum number of control sets                        |     9 |
+| Total control sets                                       |     8 |
+|    Minimum number of control sets                        |     8 |
 |    Addition due to synthesis replication                 |     0 |
 |    Addition due to physical synthesis replication        |     0 |
-| Unused register locations in slices containing registers |    31 |
+| Unused register locations in slices containing registers |    23 |
 +----------------------------------------------------------+-------+
 * Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
 ** Run report_qor_suggestions for automated merging and remapping suggestions
@@ -39,15 +39,15 @@ Table of Contents
 +--------------------+-------+
 |       Fanout       | Count |
 +--------------------+-------+
-| Total control sets |     9 |
-| >= 0 to < 4        |     2 |
-| >= 4 to < 6        |     3 |
-| >= 6 to < 8        |     2 |
+| Total control sets |     8 |
+| >= 0 to < 4        |     0 |
+| >= 4 to < 6        |     4 |
+| >= 6 to < 8        |     1 |
 | >= 8 to < 10       |     1 |
 | >= 10 to < 12      |     0 |
 | >= 12 to < 14      |     1 |
 | >= 14 to < 16      |     0 |
-| >= 16              |     0 |
+| >= 16              |     1 |
 +--------------------+-------+
 * Control sets can be remapped at either synth_design or opt_design
 
@@ -58,30 +58,29 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |               1 |            1 |
+| No           | No                    | No                     |               0 |            0 |
 | No           | No                    | Yes                    |               0 |            0 |
-| No           | Yes                   | No                     |              10 |            4 |
+| No           | Yes                   | No                     |              68 |           26 |
 | Yes          | No                    | No                     |               0 |            0 |
 | Yes          | No                    | Yes                    |               0 |            0 |
-| Yes          | Yes                   | No                     |              38 |           13 |
+| Yes          | Yes                   | No                     |              37 |           15 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
 4. Detailed Control Set Information
 -----------------------------------
 
-+----------------+------------------------------------+----------------------------------+------------------+----------------+--------------+
-|  Clock Signal  |            Enable Signal           |         Set/Reset Signal         | Slice Load Count | Bel Load Count | Bels / Slice |
-+----------------+------------------------------------+----------------------------------+------------------+----------------+--------------+
-|  clk_IBUF_BUFG |                                    |                                  |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG | keypadInstance/M_col_d             | reset_cond/Q[0]                  |                1 |              1 |         1.00 |
-|  clk_IBUF_BUFG |                                    | reset_cond/M_reset_cond_in       |                1 |              4 |         4.00 |
-|  clk_IBUF_BUFG | keypadInstance/M_row_d             | reset_cond/Q[0]                  |                1 |              4 |         4.00 |
-|  clk_IBUF_BUFG | led_strip/M_bit_ctr_q[4]_i_1_n_0   | reset_cond/Q[0]                  |                1 |              5 |         5.00 |
-|  clk_IBUF_BUFG |                                    | reset_cond/Q[0]                  |                3 |              6 |         2.00 |
-|  clk_IBUF_BUFG | led_strip/M_state_d                | reset_cond/Q[0]                  |                2 |              7 |         3.50 |
-|  clk_IBUF_BUFG | led_strip/M_pixel_ctr_q[7]_i_1_n_0 | reset_cond/Q[0]                  |                4 |              8 |         2.00 |
-|  clk_IBUF_BUFG | led_strip/M_rst_ctr_q[0]_i_2_n_0   | led_strip/M_rst_ctr_q[0]_i_1_n_0 |                4 |             13 |         3.25 |
-+----------------+------------------------------------+----------------------------------+------------------+----------------+--------------+
++----------------+-----------------------------------------------------+----------------------------------+------------------+----------------+--------------+
+|  Clock Signal  |                    Enable Signal                    |         Set/Reset Signal         | Slice Load Count | Bel Load Count | Bels / Slice |
++----------------+-----------------------------------------------------+----------------------------------+------------------+----------------+--------------+
+|  cclk/a/out[0] |                                                     | reset_cond/Q[0]                  |                2 |              4 |         2.00 |
+|  cclk/a/out[0] | keypadInstance/FSM_sequential_M_driver_q[3]_i_1_n_0 | reset_cond/Q[0]                  |                1 |              4 |         4.00 |
+|  clk_IBUF_BUFG |                                                     | reset_cond/M_reset_cond_in       |                1 |              4 |         4.00 |
+|  clk_IBUF_BUFG | led_strip/M_bit_ctr_q[4]_i_1_n_0                    | reset_cond/Q[0]                  |                2 |              5 |         2.50 |
+|  clk_IBUF_BUFG | led_strip/M_state_d                                 | reset_cond/Q[0]                  |                4 |              7 |         1.75 |
+|  clk_IBUF_BUFG | led_strip/M_pixel_ctr_q[7]_i_1_n_0                  | reset_cond/Q[0]                  |                4 |              8 |         2.00 |
+|  clk_IBUF_BUFG | led_strip/M_rst_ctr_q[0]_i_2_n_0                    | led_strip/M_rst_ctr_q[0]_i_1_n_0 |                4 |             13 |         3.25 |
+|  clk_IBUF_BUFG |                                                     | reset_cond/Q[0]                  |               23 |             60 |         2.61 |
++----------------+-----------------------------------------------------+----------------------------------+------------------+----------------+--------------+
 
 

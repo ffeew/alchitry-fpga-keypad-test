@@ -84,8 +84,12 @@ set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_verilog -library xil_defaultlib {
-  {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/keypadDriver_2.v}
+  {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/alternating_Decoder_6.v}
+  {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/counter_7.v}
+  {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/custom_clock_2.v}
+  {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/keypadDriver_5.v}
   {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/reset_conditioner_1.v}
+  {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/wave_4.v}
   {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/ws2812b_writer_3.v}
   {C:/Users/aikho/Desktop/alchitry-fpga-keypad-test/work/vivado/Test Keypad/Test Keypad.srcs/sources_1/imports/verilog/au_top_0.v}
 }

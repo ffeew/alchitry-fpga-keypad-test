@@ -6,6 +6,8 @@ module keypadDriver (
 
     output out_row[4],
 
+    output out_col[4],
+
     output button_0,
     output button_1,
     output button_2,
@@ -25,108 +27,100 @@ module keypadDriver (
     output button_asterisk,
     output button_hash
   ) {
+  
+  .clk(clk), .rst(rst) {
+    fsm driver = {DETECT_COL, DETECT_ROW1_PT1, DETECT_ROW1_PT2, DETECT_ROW2_PT1, DETECT_ROW2_PT2, DETECT_ROW3_PT1, DETECT_ROW3_PT2, DETECT_ROW4_PT1, DETECT_ROW4_PT2};
     
-  .clk(clk){
-    .rst(rst){
-      fsm state = {INPUT, SCAN_ROW1, SCAN_ROW2, SCAN_ROW3, SCAN_ROW4};
-      dff col[4];
-      dff row[4];
-    }
-    
-
+    dff in_col_dff[4](#INIT(0));
   }
 
   always {
-    
-    button_1 = col.q[0] & row.q[0];
-    button_2 = col.q[1] & row.q[0];
-    button_3 = col.q[2] & row.q[0];
-    button_a = col.q[3] & row.q[0];
-    button_4 = col.q[0] & row.q[1];
-    button_5 = col.q[1] & row.q[1];
-    button_6 = col.q[2] & row.q[1];
-    button_b = col.q[3] & row.q[1];
-    button_7 = col.q[0] & row.q[2];
-    button_8 = col.q[1] & row.q[2];
-    button_9 = col.q[2] & row.q[2];
-    button_c = col.q[3] & row.q[2];
-    button_asterisk = col.q[0] & row.q[3];
-    button_0 = col.q[1] & row.q[3];
-    button_hash = col.q[2] & row.q[3];
-    button_d = col.q[3] & row.q[3];
-    out_row[3:0] = 4b0000;
-    
-    case (state.q) {
-      state.INPUT:
-        //row.d = row.q;
-        out_row[3:0] = 4b1111;
-        row.d = 4b0000;
-        col.d = 4b0000;
-        if (|in_col[3:0]){
-          if(in_col[0]==1){
-            col.d = 4b0001;
-            }
-          else if(in_col[1]==1){
-            col.d = 4b0010;
-            }
-          else if(in_col[2]==1){
-            col.d = 4b0100;
-            }
-          else if(in_col[3]==1){
-            col.d = 4b1000;
-            }
-          else{
-            button_1 = 1;
-            button_2 = 1;
-            button_3 = 1;
-            button_4 = 1;
-          }
-          state.d = state.SCAN_ROW1;
+    button_0 = 0;
+    button_1 = 0;
+    button_2 = 0;
+    button_3 = 0;
+    button_4 = 0;
+    button_5 = 0;
+    button_6 = 0;
+    button_7 = 0;
+    button_8 = 0;
+    button_9 = 0;
+
+    button_a = 0;
+    button_b = 0;
+    button_c = 0;
+    button_d = 0;
+
+    button_asterisk = 0;
+    button_hash = 0;
+
+    in_col_dff.d = in_col;
+    out_col = in_col_dff.q;
+
+    case(driver.q) {
+      driver.DETECT_COL:
+        out_row = 4b1111;
+        if(|in_col_dff.q) {
+          driver.d = driver.DETECT_ROW1_PT1;
         }
-        
-      state.SCAN_ROW1:
-        //col.d = col.q;
-        out_row[3:0] = 4b0001;
-        if (|in_col[3:0]){
-          row.d = 4b0001;
-          state.d = state.INPUT;
+      driver.DETECT_ROW1_PT1:
+        out_row = 4b1000;
+        in_col_dff.d = in_col;
+        driver.d = driver.DETECT_ROW1_PT2;
+      driver.DETECT_ROW1_PT2:
+        out_row = 4b1000;
+        if(|in_col_dff.q) {
+          button_1 = in_col_dff.q[3];
+          button_2 = in_col_dff.q[2];
+          button_3 = in_col_dff.q[1];
+          button_a = in_col_dff.q[0];
+          driver.d = driver.DETECT_COL;
+        } else {
+          driver.d = driver.DETECT_ROW2_PT1;
         }
-        else{
-          state.d = state.SCAN_ROW2;
+      driver.DETECT_ROW2_PT1:
+        out_row = 4b0100;
+        in_col_dff.d = in_col;
+        driver.d = driver.DETECT_ROW2_PT2;
+      driver.DETECT_ROW2_PT2:
+        out_row = 4b0100;
+        if(|in_col_dff.q) {
+          button_4 = in_col_dff.q[3];
+          button_5 = in_col_dff.q[2];
+          button_6 = in_col_dff.q[1];
+          button_b = in_col_dff.q[0];
+          driver.d = driver.DETECT_COL;
+        } else {
+          driver.d = driver.DETECT_ROW3_PT1;
         }
-          
-      state.SCAN_ROW2:
-        //col.d = col.q;
-        out_row[3:0] = 4b0010;
-        if (|in_col[3:0]){
-          row.d = 4b0010;
-          state.d = state.INPUT;
+      driver.DETECT_ROW3_PT1:
+        out_row = 4b0010;
+        in_col_dff.d = in_col;
+        driver.d = driver.DETECT_ROW3_PT2;
+      driver.DETECT_ROW3_PT2:
+        out_row = 4b0010;
+        if(|in_col_dff.q) {
+          button_7 = in_col_dff.q[3];
+          button_8 = in_col_dff.q[2];
+          button_9 = in_col_dff.q[1];
+          button_c = in_col_dff.q[0];
+          driver.d = driver.DETECT_COL;
+        } else {
+          driver.d = driver.DETECT_ROW4_PT1;
         }
-        else{
-          state.d = state.SCAN_ROW3;
-        }
-      
-      state.SCAN_ROW3:
-        //col.d = col.q;
-        out_row[3:0] = 4b0100;
-        if (|in_col[3:0]){
-          row.d = 4b0100;
-          state.d = state.INPUT;
-        }
-        else{
-          state.d = state.SCAN_ROW4;
-        }        
-       
-      state.SCAN_ROW4:
-        //col.d = col.q;
-        out_row[3:0] = 4b1000;
-        if (|in_col[3:0]){
-          row.d = 4b1000;
-          state.d = state.INPUT;
-        }
-        else{
-          state.d = state.SCAN_ROW1;
-        }          
+      driver.DETECT_ROW4_PT1:
+        out_row = 4b0001;
+        in_col_dff.d = in_col;
+        driver.d = driver.DETECT_ROW4_PT2;
+      driver.DETECT_ROW4_PT2:
+        out_row = 4b0001;
+        button_asterisk = in_col_dff.q[3];
+        button_0        = in_col_dff.q[2];
+        button_hash     = in_col_dff.q[1];
+        button_d        = in_col_dff.q[0];
+        driver.d = driver.DETECT_COL;
+      default:
+        out_row = 4b0; // this should never run
     }
   }
 }

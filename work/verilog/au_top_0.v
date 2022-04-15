@@ -31,7 +31,35 @@ module au_top_0 (
     .in(M_reset_cond_in),
     .out(M_reset_cond_out)
   );
+  wire [1-1:0] M_cclk_out;
+  custom_clock_2 cclk (
+    .clk(clk),
+    .rst(rst),
+    .out(M_cclk_out)
+  );
+  reg [15:0] M_keypadVal_d, M_keypadVal_q = 32'h0000000f;
+  wire [8-1:0] M_led_strip_pixel;
+  wire [1-1:0] M_led_strip_led;
+  reg [1-1:0] M_led_strip_update;
+  reg [24-1:0] M_led_strip_color;
+  ws2812b_writer_3 led_strip (
+    .clk(clk),
+    .rst(rst),
+    .update(M_led_strip_update),
+    .color(M_led_strip_color),
+    .pixel(M_led_strip_pixel),
+    .led(M_led_strip_led)
+  );
+  wire [8-1:0] M_fancyWaveEffects_out;
+  wave_4 fancyWaveEffects (
+    .clk(clk),
+    .rst(rst),
+    .out(M_fancyWaveEffects_out)
+  );
+  reg [255:0] M_fancyWave_d, M_fancyWave_q = 1'h0;
+  
   wire [4-1:0] M_keypadInstance_out_row;
+  wire [4-1:0] M_keypadInstance_out_col;
   wire [1-1:0] M_keypadInstance_button_0;
   wire [1-1:0] M_keypadInstance_button_1;
   wire [1-1:0] M_keypadInstance_button_2;
@@ -49,11 +77,12 @@ module au_top_0 (
   wire [1-1:0] M_keypadInstance_button_asterisk;
   wire [1-1:0] M_keypadInstance_button_hash;
   reg [4-1:0] M_keypadInstance_in_col;
-  keypadDriver_2 keypadInstance (
-    .clk(clk),
+  keypadDriver_5 keypadInstance (
     .rst(rst),
+    .clk(M_cclk_out),
     .in_col(M_keypadInstance_in_col),
     .out_row(M_keypadInstance_out_row),
+    .out_col(M_keypadInstance_out_col),
     .button_0(M_keypadInstance_button_0),
     .button_1(M_keypadInstance_button_1),
     .button_2(M_keypadInstance_button_2),
@@ -71,25 +100,65 @@ module au_top_0 (
     .button_asterisk(M_keypadInstance_button_asterisk),
     .button_hash(M_keypadInstance_button_hash)
   );
-  reg [15:0] M_keypadVal_d, M_keypadVal_q = 32'h0000000f;
-  wire [8-1:0] M_led_strip_pixel;
-  wire [1-1:0] M_led_strip_led;
-  reg [1-1:0] M_led_strip_update;
-  reg [24-1:0] M_led_strip_color;
-  ws2812b_writer_3 led_strip (
-    .clk(clk),
-    .rst(rst),
-    .update(M_led_strip_update),
-    .color(M_led_strip_color),
-    .pixel(M_led_strip_pixel),
-    .led(M_led_strip_led)
+  
+  localparam LEDCOLOR = 512'h99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999;
+  
+  localparam COLORS = 6144'hff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ffff00000000ff;
+  
+  wire [6144-1:0] M_decode_out;
+  reg [512-1:0] M_decode_dataIn;
+  alternating_Decoder_6 decode (
+    .dataIn(M_decode_dataIn),
+    .out(M_decode_out)
   );
   
-  localparam LEDCOLOR = 144'hff000000ff000000ff0ff000000ff0f0000f;
+  reg [6143:0] fancyWaveToLED;
+  
+  integer i;
   
   always @* begin
+    M_fancyWave_d = M_fancyWave_q;
     M_keypadVal_d = M_keypadVal_q;
     
+    M_fancyWave_d[0+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[8+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[16+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[24+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[32+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[40+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[48+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[56+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[64+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[72+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[80+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[88+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[96+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[104+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[112+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[120+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[128+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[136+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[144+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[152+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[160+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[168+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[176+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[184+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[192+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[200+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[208+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[216+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[224+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[232+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[240+7-:8] = M_fancyWaveEffects_out;
+    M_fancyWave_d[248+7-:8] = M_fancyWaveEffects_out;
+    for (i = 1'h0; i < 9'h100; i = i + 1) begin
+      if (M_fancyWave_q[(i)*1+0-:1] == 1'h1) begin
+        fancyWaveToLED[(i)*24+23-:24] = 24'h001100;
+      end else begin
+        fancyWaveToLED[(i)*24+23-:24] = 24'h000000;
+      end
+    end
     M_reset_cond_in = ~rst_n;
     rst = M_reset_cond_out;
     M_keypadInstance_in_col = keypadcol;
@@ -120,20 +189,21 @@ module au_top_0 (
     M_keypadVal_d[13+0-:1] = M_keypadInstance_button_0;
     M_keypadVal_d[14+0-:1] = M_keypadInstance_button_hash;
     M_keypadVal_d[15+0-:1] = M_keypadInstance_button_d;
-    io_led[8+4+3-:4] = keypadcol;
+    io_led[8+4+3-:4] = M_keypadInstance_out_col;
+    M_decode_dataIn = 512'h99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999;
     M_led_strip_update = 1'h1;
-    M_led_strip_color = LEDCOLOR[(M_led_strip_pixel)*24+23-:24];
+    M_led_strip_color = fancyWaveToLED[(M_led_strip_pixel)*24+23-:24];
     outled = M_led_strip_led;
-    if (M_keypadInstance_button_0) begin
+    if (M_keypadInstance_button_1) begin
       io_led[0+4+3-:4] = 4'h0;
     end
-    if (M_keypadInstance_button_1) begin
+    if (M_keypadInstance_button_2) begin
       io_led[0+4+3-:4] = 4'h1;
     end
-    if (M_keypadInstance_button_2) begin
+    if (M_keypadInstance_button_3) begin
       io_led[0+4+3-:4] = 4'h2;
     end
-    if (M_keypadInstance_button_3) begin
+    if (M_keypadInstance_button_a) begin
       io_led[0+4+3-:4] = 4'h3;
     end
     if (M_keypadInstance_button_4) begin
@@ -145,31 +215,31 @@ module au_top_0 (
     if (M_keypadInstance_button_6) begin
       io_led[0+4+3-:4] = 4'h6;
     end
-    if (M_keypadInstance_button_7) begin
+    if (M_keypadInstance_button_b) begin
       io_led[0+4+3-:4] = 4'h7;
     end
-    if (M_keypadInstance_button_8) begin
+    if (M_keypadInstance_button_7) begin
       io_led[0+4+3-:4] = 4'h8;
     end
-    if (M_keypadInstance_button_9) begin
+    if (M_keypadInstance_button_8) begin
       io_led[0+4+3-:4] = 4'h9;
     end
-    if (M_keypadInstance_button_a) begin
+    if (M_keypadInstance_button_9) begin
       io_led[0+4+3-:4] = 4'ha;
     end
-    if (M_keypadInstance_button_b) begin
+    if (M_keypadInstance_button_c) begin
       io_led[0+4+3-:4] = 4'hb;
     end
-    if (M_keypadInstance_button_c) begin
+    if (M_keypadInstance_button_asterisk) begin
       io_led[0+4+3-:4] = 4'hc;
     end
-    if (M_keypadInstance_button_d) begin
+    if (M_keypadInstance_button_0) begin
       io_led[0+4+3-:4] = 4'hd;
     end
-    if (M_keypadInstance_button_asterisk) begin
+    if (M_keypadInstance_button_hash) begin
       io_led[0+4+3-:4] = 4'he;
     end
-    if (M_keypadInstance_button_hash) begin
+    if (M_keypadInstance_button_d) begin
       io_led[0+4+3-:4] = 4'hf;
     end
   end
@@ -177,8 +247,10 @@ module au_top_0 (
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       M_keypadVal_q <= 32'h0000000f;
+      M_fancyWave_q <= 1'h0;
     end else begin
       M_keypadVal_q <= M_keypadVal_d;
+      M_fancyWave_q <= M_fancyWave_d;
     end
   end
   

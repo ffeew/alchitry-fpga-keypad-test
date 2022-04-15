@@ -20,18 +20,79 @@ module au_top (
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
-    keypadDriver keypadInstance(.rst(rst));
+    // keypadDriver keypadInstance(.rst(rst));
     .rst(rst){
+        custom_clock cclk;
         dff keypadVal[16] (#INIT(32d15));
         ws2812b_writer led_strip(#PIXEL_COUNT(256)); //set for 3 pixels
         //multi_seven_seg seven_seg_display;
+        wave fancyWaveEffects;
+        dff fancyWave[256];
     }
   }
-  const LEDCOLOR = {24hFF0000, 24h00FF00, 24h0000FF, 24h0FF000, 24h000FF0, 24hF0000F};
+  
+  .rst(rst) {
+    keypadDriver keypadInstance(.clk(cclk.out));
+  }
+  
+  const LEDCOLOR = {2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01, 2b10, 2b01};
+  
+  const COLORS = {24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF, 24hFF0000, 24h0000FF};
+  
+  const COLORTEST = {24hFF0000, 24h0000FF};
+  
+  alternating_Decoder decode;
+  
+  sig fancyWaveToLED[256][24];
+  
+  var i;
   
   always {
     //seven_seg_display.values = 4x{{5b0}};
     
+    fancyWave.d[7:0] = fancyWaveEffects.out[7:0];
+    fancyWave.d[15:8] = fancyWaveEffects.out[7:0];
+    fancyWave.d[23:16] = fancyWaveEffects.out[7:0];
+    fancyWave.d[31:24] = fancyWaveEffects.out[7:0];
+    fancyWave.d[39:32] = fancyWaveEffects.out[7:0];
+    fancyWave.d[47:40] = fancyWaveEffects.out[7:0];
+    fancyWave.d[55:48] = fancyWaveEffects.out[7:0];
+    fancyWave.d[63:56] = fancyWaveEffects.out[7:0];
+    fancyWave.d[71:64] = fancyWaveEffects.out[7:0];
+    fancyWave.d[79:72] = fancyWaveEffects.out[7:0];
+    fancyWave.d[87:80] = fancyWaveEffects.out[7:0];
+    fancyWave.d[95:88] = fancyWaveEffects.out[7:0];
+    fancyWave.d[103:96] = fancyWaveEffects.out[7:0];
+    fancyWave.d[111:104] = fancyWaveEffects.out[7:0];
+    fancyWave.d[119:112] = fancyWaveEffects.out[7:0];
+    fancyWave.d[127:120] = fancyWaveEffects.out[7:0];
+    fancyWave.d[135:128] = fancyWaveEffects.out[7:0];
+    fancyWave.d[143:136] = fancyWaveEffects.out[7:0];
+    fancyWave.d[151:144] = fancyWaveEffects.out[7:0];
+    fancyWave.d[159:152] = fancyWaveEffects.out[7:0];
+    fancyWave.d[167:160] = fancyWaveEffects.out[7:0];
+    fancyWave.d[175:168] = fancyWaveEffects.out[7:0];
+    fancyWave.d[183:176] = fancyWaveEffects.out[7:0];
+    fancyWave.d[191:184] = fancyWaveEffects.out[7:0];
+    fancyWave.d[199:192] = fancyWaveEffects.out[7:0];
+    fancyWave.d[207:200] = fancyWaveEffects.out[7:0];
+    fancyWave.d[215:208] = fancyWaveEffects.out[7:0];
+    fancyWave.d[223:216] = fancyWaveEffects.out[7:0];
+    fancyWave.d[231:224] = fancyWaveEffects.out[7:0];
+    fancyWave.d[239:232] = fancyWaveEffects.out[7:0];
+    fancyWave.d[247:240] = fancyWaveEffects.out[7:0];
+    fancyWave.d[255:248] = fancyWaveEffects.out[7:0];
+    
+    for (i=0; i<256; i++){
+    
+      if (fancyWave.q[i]==1){
+        fancyWaveToLED[i] = 24h001100;
+        }
+      else{
+        fancyWaveToLED[i] = 24h000000;
+      }
+      
+    }
     
     
     
@@ -74,23 +135,25 @@ module au_top (
     
     
     
-    io_led[1][7:4] = keypadcol[3:0];
+    io_led[1][7:4] = keypadInstance.out_col[3:0];
     
-    led_strip.update=1; //sample write 
-    led_strip.color=LEDCOLOR[led_strip.pixel]; 
+    
+    decode.dataIn = LEDCOLOR;
+    led_strip.update = 1; //sample write 
+    led_strip.color= fancyWaveToLED[led_strip.pixel]; 
     outled=led_strip.led;
     
     //keypad tester
-if(keypadInstance.button_0) {
+if(keypadInstance.button_1) {
   io_led[0][7:4] = 4b0000;
 }
-if(keypadInstance.button_1) {
+if(keypadInstance.button_2) {
   io_led[0][7:4] = 4b0001;
 }
-if(keypadInstance.button_2) {
+if(keypadInstance.button_3) {
   io_led[0][7:4] = 4b0010;
 }
-if(keypadInstance.button_3) {
+if(keypadInstance.button_a) {
   io_led[0][7:4] = 4b0011;
 }
 if(keypadInstance.button_4) {
@@ -102,31 +165,31 @@ if(keypadInstance.button_5) {
 if(keypadInstance.button_6) {
   io_led[0][7:4] = 4b0110;
 }
-if(keypadInstance.button_7) {
+if(keypadInstance.button_b) {
   io_led[0][7:4] = 4b0111;
 }
-if(keypadInstance.button_8) {
+if(keypadInstance.button_7) {
   io_led[0][7:4] = 4b1000;
 }
-if(keypadInstance.button_9) {
+if(keypadInstance.button_8) {
   io_led[0][7:4] = 4b1001;
 }
-if(keypadInstance.button_a) {
+if(keypadInstance.button_9) {
   io_led[0][7:4] = 4b1010;
 }
-if(keypadInstance.button_b) {
+if(keypadInstance.button_c) {
   io_led[0][7:4] = 4b1011;
 }
-if(keypadInstance.button_c) {
+if(keypadInstance.button_asterisk) {
   io_led[0][7:4] = 4b1100;
 }
-if(keypadInstance.button_d) {
+if(keypadInstance.button_0) {
   io_led[0][7:4] = 4b1101;
 }
-if(keypadInstance.button_asterisk) {
+if(keypadInstance.button_hash) {
   io_led[0][7:4] = 4b1110;
 }
-if(keypadInstance.button_hash) {
+if(keypadInstance.button_d) {
   io_led[0][7:4] = 4b1111;
 }
 }
